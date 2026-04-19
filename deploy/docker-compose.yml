@@ -1,0 +1,61 @@
+services:
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ethics_sra
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build: ../backend
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ethics_sra
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      # 百炼/DashScope AI 配置
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-your-api-key-here}
+      AI_MODEL: qwen-plus
+      AI_TEMPERATURE: 0.7
+      AI_MAX_TOKENS: 2000
+      # JWT
+      JWT_SECRET: ethics-sra-dev-secret-change-in-production-min-32-chars!!
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+      STORAGE_TYPE: minio
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: ethics-sra
+    depends_on:
+      mysql:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+volumes:
+  mysql_data:
+  minio_data:

@@ -1,0 +1,21 @@
+backend/target/
+backend/logs/
+backend/data/
+frontend/node_modules/
+frontend/dist/
+ai-service/__pycache__/
+ai-service/.venv/
+data/
+*.log
+.DS_Store
+.classpath
+.project
+.settings/
+.idea/
+
+
+
+# Local clone used only to generate Cursor rules (agents live in .cursor/rules/*.mdc)
+agency-agents-zh/
+
+.cursor

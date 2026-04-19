@@ -1,0 +1,122 @@
+@import './base.css';
+@import './styles/variables.css';
+@import './styles/themes.css';
+@import './styles/animations.css';
+
+#app {
+  min-height: 100vh;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* === 响应式表格 === */
+.responsive-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* === 触摸目标优化 === */
+@media (max-width: 991px) {
+  .ant-btn:not(.ant-btn-link),
+  .ant-menu-item {
+    min-height: 44px;
+  }
+}
+
+/* === 响应式工具类 === */
+
+/* 移动端隐藏 */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* 桌面端隐藏 */
+@media (min-width: 768px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* 平板端隐藏 */
+@media (max-width: 1199px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* 响应式间距 */
+@media (max-width: 767px) {
+  .responsive-mb {
+    margin-bottom: 8px;
+  }
+  .responsive-p {
+    padding: 12px !important;
+  }
+}
+
+/* 响应式字体大小 */
+@media (max-width: 767px) {
+  .text-responsive {
+    font-size: 13px;
+  }
+  .title-responsive {
+    font-size: 18px !important;
+  }
+}
+
+/* 响应式卡片 */
+@media (max-width: 767px) {
+  .ant-card {
+    margin-bottom: 12px;
+  }
+  
+  .stat-card {
+    margin-bottom: 12px;
+  }
+}
+
+/* === 全局动画 === */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === 选中文字 === */
+::selection {
+  background: var(--color-primary-light);
+  color: var(--color-primary-active);
+}
+
+/* === 焦点样式 === */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* === 链接样式 === */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* === 图片 === */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* === 禁用指针事件时的样式 === */
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
