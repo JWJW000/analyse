@@ -50,6 +50,7 @@ public class LiteratureService {
         l.setKeywords(req.keywords());
         l.setFilePath(filePath);
         l.setCreatedBy(SecurityUtils.currentUserId());
+        applyMetadata(l, req);
         l = literatureRepository.save(l);
         auditService.log(SecurityUtils.currentUserId(), "LITERATURE_CREATE", "Literature", l.getId(), null);
         return toDto(l);
@@ -63,6 +64,7 @@ public class LiteratureService {
         l.setSource(req.source());
         l.setAbstractText(req.abstractText());
         l.setKeywords(req.keywords());
+        applyMetadata(l, req);
         l = literatureRepository.save(l);
         auditService.log(SecurityUtils.currentUserId(), "LITERATURE_UPDATE", "Literature", l.getId(), null);
         return toDto(l);
@@ -171,6 +173,17 @@ public class LiteratureService {
         return "本文对相关研究领域进行了探讨分析。";
     }
 
+    private void applyMetadata(Literature l, LiteratureUpsertRequest req) {
+        l.setPublicationYear(req.publicationYear());
+        l.setDoi(req.doi());
+        l.setUrl(req.url());
+        l.setLiteratureType(req.literatureType());
+        l.setResearchMethod(req.researchMethod());
+        l.setApplicableTopic(req.applicableTopic());
+        l.setKeyFindings(req.keyFindings());
+        l.setEvidenceValue(req.evidenceValue());
+    }
+
     private LiteratureDto toDto(Literature l) {
         return new LiteratureDto(
                 l.getId(),
@@ -180,7 +193,15 @@ public class LiteratureService {
                 l.getAbstractText(),
                 l.getKeywords(),
                 l.getFilePath(),
-                l.getCreatedBy()
+                l.getCreatedBy(),
+                l.getPublicationYear(),
+                l.getDoi(),
+                l.getUrl(),
+                l.getLiteratureType(),
+                l.getResearchMethod(),
+                l.getApplicableTopic(),
+                l.getKeyFindings(),
+                l.getEvidenceValue()
         );
     }
 }

@@ -18,7 +18,7 @@ spring:
       hibernate:
         format_sql: true
   flyway:
-    enabled: false
+    enabled: true
     # locations: classpath:db/migration
     # 库中已有表但未执行过 Flyway 时（无 flyway_schema_history）可自动 baseline，避免启动失败
     baseline-on-migrate: true
@@ -36,7 +36,7 @@ app:
   ai-service-url: ${AI_SERVICE_URL:http://localhost:8001}
   backup-path: ${BACKUP_PATH:./data/backups}
   upload-path: ${UPLOAD_PATH:./data/uploads}
-  cors-origins: ${CORS_ORIGINS:http://localhost:5174,http://127.0.0.1:5174}
+  cors-origins: ${CORS_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
   # 附件存储：local=本机目录；minio=MinIO（S3 兼容），适合 Docker 部署
   storage:
     type: ${STORAGE_TYPE:local}
@@ -50,7 +50,7 @@ app:
 
 ai:
   dashscope:
-    api-key: ${DASHSCOPE_API_KEY:your-api-key-here}
+    api-key: ${DASHSCOPE_API_KEY:sk-e519536511884229ae60cb06a627120d}
     base-url: https://dashscope.aliyuncs.com/api/v1
     model: ${AI_MODEL:qwen-plus}
     max-tokens: ${AI_MAX_TOKENS:2000}

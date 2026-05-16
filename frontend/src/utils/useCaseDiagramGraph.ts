@@ -35,7 +35,7 @@ export function diagramGenerationToX6Json(diagram: DiagramGenerationDto): string
     height: 42,
     label: node.label,
     attrs: {
-      body: { stroke: '#5F95FF', fill: '#EFF4FF', rx: 8, ry: 8 },
+      body: { stroke: '#5F95FF', fill: '#EFF4FF', rx: 8, ry: 8, magnet: true },
       label: { fill: '#1f2d3d', fontWeight: 600 },
     },
     data: { description: node.description },
@@ -50,7 +50,7 @@ export function diagramGenerationToX6Json(diagram: DiagramGenerationDto): string
     height: 64,
     label: node.label,
     attrs: {
-      body: { stroke: '#73d13d', fill: '#f6ffed' },
+      body: { stroke: '#73d13d', fill: '#f6ffed', magnet: true },
       label: { fill: '#244f1d', fontWeight: 600 },
     },
     data: { description: node.description },

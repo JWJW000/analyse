@@ -8,6 +8,14 @@ public record EthicsModuleDto(
         String description,
         String caseText,
         String reference,
-        Integer currentVersion
+        Integer currentVersion,
+        String applicableScenario,
+        String teachingObjective,
+        String valuePoint,
+        String discussionQuestions,
+        String riskPoints,
+        String integrationSuggestion,
+        String applicableMajor,
+        String difficultyLevel
 ) {
 }

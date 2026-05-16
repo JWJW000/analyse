@@ -8,6 +8,14 @@ public record LiteratureDto(
         String abstractText,
         String keywords,
         String filePath,
-        Long createdBy
+        Long createdBy,
+        Integer publicationYear,
+        String doi,
+        String url,
+        String literatureType,
+        String researchMethod,
+        String applicableTopic,
+        String keyFindings,
+        String evidenceValue
 ) {
 }

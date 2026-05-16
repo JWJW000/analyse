@@ -28,6 +28,30 @@ public class Literature {
     @Column(name = "created_by")
     private Long createdBy;
 
+    @Column(name = "publication_year")
+    private Integer publicationYear;
+
+    @Column(length = 128)
+    private String doi;
+
+    @Column(length = 512)
+    private String url;
+
+    @Column(name = "literature_type")
+    private String literatureType;
+
+    @Column(name = "research_method")
+    private String researchMethod;
+
+    @Column(name = "applicable_topic")
+    private String applicableTopic;
+
+    @Column(name = "key_findings", columnDefinition = "TEXT")
+    private String keyFindings;
+
+    @Column(name = "evidence_value", columnDefinition = "TEXT")
+    private String evidenceValue;
+
     @Column(name = "created_at")
     private Instant createdAt;
 
@@ -103,6 +127,70 @@ public class Literature {
 
     public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public Integer getPublicationYear() {
+        return publicationYear;
+    }
+
+    public void setPublicationYear(Integer publicationYear) {
+        this.publicationYear = publicationYear;
+    }
+
+    public String getDoi() {
+        return doi;
+    }
+
+    public void setDoi(String doi) {
+        this.doi = doi;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getLiteratureType() {
+        return literatureType;
+    }
+
+    public void setLiteratureType(String literatureType) {
+        this.literatureType = literatureType;
+    }
+
+    public String getResearchMethod() {
+        return researchMethod;
+    }
+
+    public void setResearchMethod(String researchMethod) {
+        this.researchMethod = researchMethod;
+    }
+
+    public String getApplicableTopic() {
+        return applicableTopic;
+    }
+
+    public void setApplicableTopic(String applicableTopic) {
+        this.applicableTopic = applicableTopic;
+    }
+
+    public String getKeyFindings() {
+        return keyFindings;
+    }
+
+    public void setKeyFindings(String keyFindings) {
+        this.keyFindings = keyFindings;
+    }
+
+    public String getEvidenceValue() {
+        return evidenceValue;
+    }
+
+    public void setEvidenceValue(String evidenceValue) {
+        this.evidenceValue = evidenceValue;
     }
 
     public Instant getCreatedAt() {

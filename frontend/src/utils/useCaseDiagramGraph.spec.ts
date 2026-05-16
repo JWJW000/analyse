@@ -14,7 +14,9 @@ describe('diagramGenerationToX6Json', () => {
       recommendations: [],
     })
 
-    const graph = JSON.parse(json) as { cells: Array<{ id: string; shape: string; label?: string }> }
+    const graph = JSON.parse(json) as {
+      cells: Array<{ id: string; shape: string; label?: string; attrs?: { body?: { magnet?: boolean } } }>
+    }
 
     expect(graph.cells).toHaveLength(3)
     expect(graph.cells).toEqual(
@@ -24,5 +26,7 @@ describe('diagramGenerationToX6Json', () => {
         expect.objectContaining({ id: 'edge-1', shape: 'edge' }),
       ]),
     )
+    expect(graph.cells.find((cell) => cell.id === 'actor-1')?.attrs?.body?.magnet).toBe(true)
+    expect(graph.cells.find((cell) => cell.id === 'uc-1')?.attrs?.body?.magnet).toBe(true)
   })
 })

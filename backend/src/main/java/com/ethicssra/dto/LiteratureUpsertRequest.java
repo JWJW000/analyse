@@ -7,6 +7,14 @@ public record LiteratureUpsertRequest(
         String author,
         String source,
         String abstractText,
-        String keywords
+        String keywords,
+        Integer publicationYear,
+        String doi,
+        String url,
+        String literatureType,
+        String researchMethod,
+        String applicableTopic,
+        String keyFindings,
+        String evidenceValue
 ) {
 }

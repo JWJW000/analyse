@@ -14,6 +14,14 @@ type Mod = {
   description: string | null
   caseText: string | null
   reference: string | null
+  applicableScenario: string | null
+  teachingObjective: string | null
+  valuePoint: string | null
+  discussionQuestions: string | null
+  riskPoints: string | null
+  integrationSuggestion: string | null
+  applicableMajor: string | null
+  difficultyLevel: string | null
 }
 
 const auth = useAuthStore()
@@ -22,14 +30,23 @@ const list = ref<Mod[]>([])
 const q = ref('')
 const open = ref(false)
 const editing = ref<Mod | null>(null)
-const form = ref({
+const emptyForm = () => ({
   title: '',
   category: '',
   keywords: '',
   description: '',
   caseText: '',
   reference: '',
+  applicableScenario: '',
+  teachingObjective: '',
+  valuePoint: '',
+  discussionQuestions: '',
+  riskPoints: '',
+  integrationSuggestion: '',
+  applicableMajor: '',
+  difficultyLevel: '',
 })
+const form = ref(emptyForm())
 
 /** 列表筛选：整合展示中的三个维度 */
 const dimFilter = ref<'all' | 'knowledge' | 'case' | 'norm'>('all')
@@ -58,7 +75,7 @@ async function load() {
 
 function openCreate() {
   editing.value = null
-  form.value = { title: '', category: '', keywords: '', description: '', caseText: '', reference: '' }
+  form.value = emptyForm()
   open.value = true
 }
 
@@ -72,6 +89,14 @@ async function openEdit(row: Mod) {
     description: full.description || '',
     caseText: full.caseText || '',
     reference: full.reference || '',
+    applicableScenario: full.applicableScenario || '',
+    teachingObjective: full.teachingObjective || '',
+    valuePoint: full.valuePoint || '',
+    discussionQuestions: full.discussionQuestions || '',
+    riskPoints: full.riskPoints || '',
+    integrationSuggestion: full.integrationSuggestion || '',
+    applicableMajor: full.applicableMajor || '',
+    difficultyLevel: full.difficultyLevel || '',
   }
   open.value = true
 }
@@ -139,7 +164,7 @@ onMounted(async () => {
     <a-space wrap>
       <a-input
         v-model:value="q"
-        placeholder="搜索标题、类别、关键词或正文…"
+        placeholder="搜索标题、类别、关键词、场景或价值点…"
         style="width: min(100%, 280px)"
         @press-enter="load"
       />
@@ -164,6 +189,8 @@ onMounted(async () => {
       >
         <a-table-column title="标题" data-index="title" ellipsis />
         <a-table-column title="类别" data-index="category" width="100" />
+        <a-table-column title="难度" data-index="difficultyLevel" width="80" />
+        <a-table-column title="适用专业/课程" data-index="applicableMajor" ellipsis />
         <a-table-column title="构成" width="120">
           <template #default="{ record }">
             <a-space :size="4" wrap>
@@ -201,6 +228,23 @@ onMounted(async () => {
         <div class="ethics-block">{{ detail.caseText || '（未录入）' }}</div>
         <a-divider orientation="left">规范 / 标准来源</a-divider>
         <div class="ethics-block ethics-block-mono">{{ detail.reference || '（未录入）' }}</div>
+        <a-divider orientation="left">适用场景</a-divider>
+        <div class="ethics-block">{{ detail.applicableScenario || '（未录入）' }}</div>
+        <a-divider orientation="left">教学目标</a-divider>
+        <div class="ethics-block">{{ detail.teachingObjective || '（未录入）' }}</div>
+        <a-divider orientation="left">价值点</a-divider>
+        <div class="ethics-block">{{ detail.valuePoint || '（未录入）' }}</div>
+        <a-divider orientation="left">讨论问题</a-divider>
+        <div class="ethics-block">{{ detail.discussionQuestions || '（未录入）' }}</div>
+        <a-divider orientation="left">风险点</a-divider>
+        <div class="ethics-block">{{ detail.riskPoints || '（未录入）' }}</div>
+        <a-divider orientation="left">嵌入建议</a-divider>
+        <div class="ethics-block">{{ detail.integrationSuggestion || '（未录入）' }}</div>
+        <a-divider orientation="left">适用专业 / 难度</a-divider>
+        <a-descriptions :column="1" bordered size="small">
+          <a-descriptions-item label="适用专业/课程">{{ detail.applicableMajor || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="难度等级">{{ detail.difficultyLevel || '—' }}</a-descriptions-item>
+        </a-descriptions>
       </template>
     </a-drawer>
 
@@ -233,6 +277,30 @@ onMounted(async () => {
             v-model:value="form.reference"
             placeholder="如规范名称、标准编号、文件来源、链接说明等"
           />
+        </a-form-item>
+        <a-form-item label="适用场景">
+          <a-textarea v-model:value="form.applicableScenario" :rows="3" placeholder="适合哪些项目、课程任务或需求场景引用" />
+        </a-form-item>
+        <a-form-item label="教学目标">
+          <a-textarea v-model:value="form.teachingObjective" :rows="3" placeholder="学生通过本模块应理解或形成的能力" />
+        </a-form-item>
+        <a-form-item label="价值点">
+          <a-input v-model:value="form.valuePoint" placeholder="如：诚信、责任、公平、公共安全、可持续发展" />
+        </a-form-item>
+        <a-form-item label="讨论问题">
+          <a-textarea v-model:value="form.discussionQuestions" :rows="3" placeholder="课堂讨论或报告反思问题" />
+        </a-form-item>
+        <a-form-item label="风险点">
+          <a-textarea v-model:value="form.riskPoints" :rows="3" placeholder="常见误区、伦理风险或工程风险" />
+        </a-form-item>
+        <a-form-item label="嵌入建议">
+          <a-textarea v-model:value="form.integrationSuggestion" :rows="3" placeholder="建议如何写入需求、约束、验收标准或报告章节" />
+        </a-form-item>
+        <a-form-item label="适用专业/课程">
+          <a-input v-model:value="form.applicableMajor" placeholder="如：软件工程、人工智能、数据科学" />
+        </a-form-item>
+        <a-form-item label="难度等级">
+          <a-input v-model:value="form.difficultyLevel" placeholder="如：低、中、高" />
         </a-form-item>
       </a-form>
     </a-modal>

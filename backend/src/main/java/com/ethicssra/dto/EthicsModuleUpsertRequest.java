@@ -8,6 +8,14 @@ public record EthicsModuleUpsertRequest(
         String keywords,
         String description,
         String caseText,
-        String reference
+        String reference,
+        String applicableScenario,
+        String teachingObjective,
+        String valuePoint,
+        String discussionQuestions,
+        String riskPoints,
+        String integrationSuggestion,
+        String applicableMajor,
+        String difficultyLevel
 ) {
 }

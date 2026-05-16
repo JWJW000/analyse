@@ -2,7 +2,7 @@
 -- Supporting tables for AI Mentor functionality
 
 -- AI Mentor Conversation History
-CREATE TABLE mentor_conversation (
+CREATE TABLE IF NOT EXISTS mentor_conversation (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     project_id BIGINT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE mentor_conversation (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- AI Mentor Suggestion Log
-CREATE TABLE mentor_suggestion_log (
+CREATE TABLE IF NOT EXISTS mentor_suggestion_log (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     project_id BIGINT NOT NULL,
@@ -30,19 +30,50 @@ CREATE TABLE mentor_suggestion_log (
     INDEX idx_shown_at (shown_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Project Phase Checklist Enhancement
--- Add completion hints and tips to existing checklist items
-ALTER TABLE project_phase_checklist_item
-    ADD COLUMN ai_tip TEXT NULL COMMENT 'AI mentor specific tip for this checklist item';
+-- Add project context for AI.
+SET @sql := (
+    SELECT IF(
+        COUNT(*) = 0,
+        'ALTER TABLE projects ADD COLUMN ai_context JSON NULL COMMENT ''AI mentor context cache''',
+        'SELECT ''projects.ai_context already exists'''
+    )
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'projects'
+      AND COLUMN_NAME = 'ai_context'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
--- Add project context for AI
-ALTER TABLE projects
-    ADD COLUMN ai_context JSON NULL COMMENT 'AI mentor context cache';
+-- Add fields to track student learning progress.
+SET @sql := (
+    SELECT IF(
+        COUNT(*) = 0,
+        'ALTER TABLE submission ADD COLUMN ai_analysis TEXT NULL COMMENT ''AI analysis of the submission''',
+        'SELECT ''submission.ai_analysis already exists'''
+    )
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'submission'
+      AND COLUMN_NAME = 'ai_analysis'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
--- Add fields to track student learning progress
-ALTER TABLE submissions
-    ADD COLUMN ai_analysis TEXT NULL COMMENT 'AI analysis of the submission';
-
--- Add feedback iteration tracking
-ALTER TABLE comments
-    ADD COLUMN iteration INT DEFAULT 1 COMMENT 'Feedback iteration number';
+-- Add feedback iteration tracking.
+SET @sql := (
+    SELECT IF(
+        COUNT(*) = 0,
+        'ALTER TABLE comments ADD COLUMN iteration INT DEFAULT 1 COMMENT ''Feedback iteration number''',
+        'SELECT ''comments.iteration already exists'''
+    )
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'comments'
+      AND COLUMN_NAME = 'iteration'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

@@ -12,6 +12,14 @@ type Lit = {
   abstractText: string | null
   keywords: string | null
   filePath: string | null
+  publicationYear: number | null
+  doi: string | null
+  url: string | null
+  literatureType: string | null
+  researchMethod: string | null
+  applicableTopic: string | null
+  keyFindings: string | null
+  evidenceValue: string | null
 }
 
 type LiteratureAnalysis = {
@@ -27,7 +35,22 @@ const list = ref<Lit[]>([])
 const q = ref('')
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
-const form = ref({ title: '', author: '', source: '', abstractText: '', keywords: '' })
+const emptyForm = () => ({
+  title: '',
+  author: '',
+  source: '',
+  abstractText: '',
+  keywords: '',
+  publicationYear: undefined as number | undefined,
+  doi: '',
+  url: '',
+  literatureType: '',
+  researchMethod: '',
+  applicableTopic: '',
+  keyFindings: '',
+  evidenceValue: '',
+})
+const form = ref(emptyForm())
 const detailOpen = ref(false)
 const detail = ref<Lit | null>(null)
 const analyzingId = ref<number | null>(null)
@@ -41,7 +64,7 @@ async function load() {
 
 function openCreate() {
   editingId.value = null
-  form.value = { title: '', author: '', source: '', abstractText: '', keywords: '' }
+  form.value = emptyForm()
   modalOpen.value = true
 }
 
@@ -53,6 +76,14 @@ function openEdit(row: Lit) {
     source: row.source || '',
     abstractText: row.abstractText || '',
     keywords: row.keywords || '',
+    publicationYear: row.publicationYear || undefined,
+    doi: row.doi || '',
+    url: row.url || '',
+    literatureType: row.literatureType || '',
+    researchMethod: row.researchMethod || '',
+    applicableTopic: row.applicableTopic || '',
+    keyFindings: row.keyFindings || '',
+    evidenceValue: row.evidenceValue || '',
   }
   modalOpen.value = true
 }
@@ -163,7 +194,7 @@ onMounted(load)
 <template>
   <a-space direction="vertical" style="width: 100%">
     <a-space wrap>
-      <a-input v-model:value="q" placeholder="标题 / 作者 / 关键词" style="width: 240px" @press-enter="load" />
+      <a-input v-model:value="q" placeholder="标题 / 作者 / 关键词 / 主题 / DOI" style="width: 300px" @press-enter="load" />
       <a-button type="primary" @click="load">搜索</a-button>
       <a-button @click="openCreate">新建文献</a-button>
     </a-space>
@@ -171,6 +202,9 @@ onMounted(load)
       <a-table :data-source="list" :pagination="false" row-key="id" :scroll="{ x: 'max-content' }">
         <a-table-column title="标题" data-index="title" ellipsis />
         <a-table-column title="作者" data-index="author" width="120" />
+        <a-table-column title="年份" data-index="publicationYear" width="90" />
+        <a-table-column title="类型" data-index="literatureType" width="110" />
+        <a-table-column title="适用主题" data-index="applicableTopic" ellipsis />
         <a-table-column title="关键词" data-index="keywords" ellipsis />
         <a-table-column title="附件" width="120">
           <template #default="{ record }">
@@ -216,8 +250,32 @@ onMounted(load)
         <a-form-item label="来源">
           <a-input v-model:value="form.source" />
         </a-form-item>
+        <a-form-item label="发表年份">
+          <a-input-number v-model:value="form.publicationYear" :min="1900" :max="2100" style="width: 100%" />
+        </a-form-item>
+        <a-form-item label="DOI">
+          <a-input v-model:value="form.doi" placeholder="如：10.1000/example" />
+        </a-form-item>
+        <a-form-item label="链接">
+          <a-input v-model:value="form.url" placeholder="论文、标准或课程资料链接" />
+        </a-form-item>
+        <a-form-item label="文献类型">
+          <a-input v-model:value="form.literatureType" placeholder="如：期刊论文、会议论文、教学案例、标准规范" />
+        </a-form-item>
+        <a-form-item label="研究方法">
+          <a-input v-model:value="form.researchMethod" placeholder="如：案例研究、问卷调查、实验研究、规范分析" />
+        </a-form-item>
+        <a-form-item label="适用主题">
+          <a-input v-model:value="form.applicableTopic" placeholder="可支撑的课程主题或需求场景" />
+        </a-form-item>
         <a-form-item label="摘要">
-          <a-textarea v-model:value="form.abstractText" :rows="3" />
+          <a-textarea v-model:value="form.abstractText" :rows="4" />
+        </a-form-item>
+        <a-form-item label="核心结论">
+          <a-textarea v-model:value="form.keyFindings" :rows="3" placeholder="提炼与项目需求、工程伦理或课程教学相关的结论" />
+        </a-form-item>
+        <a-form-item label="证据价值">
+          <a-textarea v-model:value="form.evidenceValue" :rows="3" placeholder="说明该文献可支撑哪些需求、约束或验收标准" />
         </a-form-item>
         <a-form-item label="关键词">
           <a-input v-model:value="form.keywords" />
@@ -231,8 +289,19 @@ onMounted(load)
           <a-descriptions-item label="标题">{{ detail.title }}</a-descriptions-item>
           <a-descriptions-item label="作者">{{ detail.author || '—' }}</a-descriptions-item>
           <a-descriptions-item label="来源">{{ detail.source || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="发表年份">{{ detail.publicationYear || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="DOI">{{ detail.doi || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="链接">
+            <a v-if="detail.url" :href="detail.url" target="_blank" rel="noreferrer">{{ detail.url }}</a>
+            <span v-else>—</span>
+          </a-descriptions-item>
+          <a-descriptions-item label="文献类型">{{ detail.literatureType || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="研究方法">{{ detail.researchMethod || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="适用主题">{{ detail.applicableTopic || '—' }}</a-descriptions-item>
           <a-descriptions-item label="关键词">{{ detail.keywords || '—' }}</a-descriptions-item>
           <a-descriptions-item label="摘要">{{ detail.abstractText || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="核心结论">{{ detail.keyFindings || '—' }}</a-descriptions-item>
+          <a-descriptions-item label="证据价值">{{ detail.evidenceValue || '—' }}</a-descriptions-item>
           <a-descriptions-item label="附件">
             <template v-if="detail.filePath">
               <a-space>

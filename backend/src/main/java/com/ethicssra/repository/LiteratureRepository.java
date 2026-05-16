@@ -15,7 +15,13 @@ public interface LiteratureRepository extends JpaRepository<Literature, Long> {
             "LOWER(COALESCE(l.title,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(l.author,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(l.keywords,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
-            "LOWER(COALESCE(l.abstractText,'')) LIKE LOWER(CONCAT('%', :q, '%'))")
+            "LOWER(COALESCE(l.abstractText,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(l.doi,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(l.literatureType,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(l.researchMethod,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(l.applicableTopic,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(l.keyFindings,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(l.evidenceValue,'')) LIKE LOWER(CONCAT('%', :q, '%'))")
     List<Literature> search(@Param("q") String q);
 
     @Query("SELECT COUNT(l) FROM Literature l, ProjectLiterature pl WHERE l.id = pl.literature.id AND pl.project.id = :projectId")

@@ -15,7 +15,15 @@ public interface EthicsModuleRepository extends JpaRepository<EthicsModule, Long
             "LOWER(COALESCE(e.keywords,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(e.description,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(e.caseText,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
-            "LOWER(COALESCE(e.reference,'')) LIKE LOWER(CONCAT('%', :q, '%'))")
+            "LOWER(COALESCE(e.reference,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.applicableScenario,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.teachingObjective,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.valuePoint,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.discussionQuestions,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.riskPoints,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.integrationSuggestion,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.applicableMajor,'')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(e.difficultyLevel,'')) LIKE LOWER(CONCAT('%', :q, '%'))")
     List<EthicsModule> search(@Param("q") String q);
 
     @Query("SELECT COUNT(e) FROM EthicsModule e, ProjectEthicsModule pem WHERE e.id = pem.ethicsModule.id AND pem.project.id = :projectId")

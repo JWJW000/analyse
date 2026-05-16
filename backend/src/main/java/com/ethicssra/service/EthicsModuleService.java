@@ -53,6 +53,7 @@ public class EthicsModuleService {
         m.setDescription(req.description());
         m.setCaseText(req.caseText());
         m.setReference(req.reference());
+        applyMetadata(m, req);
         m.setCurrentVersion(1);
         m = moduleRepository.save(m);
         saveRevision(m, 1);
@@ -70,6 +71,7 @@ public class EthicsModuleService {
         m.setDescription(req.description());
         m.setCaseText(req.caseText());
         m.setReference(req.reference());
+        applyMetadata(m, req);
         m.setCurrentVersion(next);
         m = moduleRepository.save(m);
         saveRevision(m, next);
@@ -97,7 +99,26 @@ public class EthicsModuleService {
         r.setDescription(m.getDescription());
         r.setCaseText(m.getCaseText());
         r.setReference(m.getReference());
+        r.setApplicableScenario(m.getApplicableScenario());
+        r.setTeachingObjective(m.getTeachingObjective());
+        r.setValuePoint(m.getValuePoint());
+        r.setDiscussionQuestions(m.getDiscussionQuestions());
+        r.setRiskPoints(m.getRiskPoints());
+        r.setIntegrationSuggestion(m.getIntegrationSuggestion());
+        r.setApplicableMajor(m.getApplicableMajor());
+        r.setDifficultyLevel(m.getDifficultyLevel());
         revisionRepository.save(r);
+    }
+
+    private void applyMetadata(EthicsModule m, EthicsModuleUpsertRequest req) {
+        m.setApplicableScenario(req.applicableScenario());
+        m.setTeachingObjective(req.teachingObjective());
+        m.setValuePoint(req.valuePoint());
+        m.setDiscussionQuestions(req.discussionQuestions());
+        m.setRiskPoints(req.riskPoints());
+        m.setIntegrationSuggestion(req.integrationSuggestion());
+        m.setApplicableMajor(req.applicableMajor());
+        m.setDifficultyLevel(req.difficultyLevel());
     }
 
     private EthicsModuleDto toDto(EthicsModule m) {
@@ -109,7 +130,15 @@ public class EthicsModuleService {
                 m.getDescription(),
                 m.getCaseText(),
                 m.getReference(),
-                m.getCurrentVersion()
+                m.getCurrentVersion(),
+                m.getApplicableScenario(),
+                m.getTeachingObjective(),
+                m.getValuePoint(),
+                m.getDiscussionQuestions(),
+                m.getRiskPoints(),
+                m.getIntegrationSuggestion(),
+                m.getApplicableMajor(),
+                m.getDifficultyLevel()
         );
     }
 }

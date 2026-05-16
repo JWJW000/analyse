@@ -14,7 +14,7 @@ export function buildMinimalUseCaseGraphJson(title: string): string {
         height: 40,
         label: '用户',
         attrs: {
-          body: { stroke: '#5F95FF', fill: '#EFF4FF', rx: 6, ry: 6 },
+          body: { stroke: '#5F95FF', fill: '#EFF4FF', rx: 6, ry: 6, magnet: true },
           label: { fill: '#333' },
         },
       },
@@ -27,7 +27,7 @@ export function buildMinimalUseCaseGraphJson(title: string): string {
         height: 64,
         label: uc,
         attrs: {
-          body: { stroke: '#73d13d', fill: '#f6ffed' },
+          body: { stroke: '#73d13d', fill: '#f6ffed', magnet: true },
           label: { fill: '#333' },
         },
       },
